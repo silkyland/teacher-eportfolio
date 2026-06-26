@@ -44,6 +44,11 @@ class User extends Authenticatable
         return $this->hasMany(Award::class);
     }
 
+    public function portfolioFiles(): HasMany
+    {
+        return $this->hasMany(PortfolioFile::class);
+    }
+
     public function totalTrainingHours(): int
     {
         return (int) $this->certificates()->sum('training_hours');

@@ -61,17 +61,11 @@
     </div>
 
     <div class="md:col-span-2">
-        <x-input-label for="file" value="ไฟล์แนบ (PDF/JPG/PNG สูงสุด 5MB)" />
-        <input id="file" name="file" type="file" accept=".pdf,.jpg,.jpeg,.png" class="mt-1 block w-full text-sm text-slate-600" />
-        @if($certificate?->file_path)
-            <p class="mt-2 text-sm text-slate-600">
-                ไฟล์ปัจจุบัน: <a href="{{ $certificate->file_url }}" target="_blank" class="text-sky-600 hover:underline">เปิดดู</a>
-            </p>
-            <label class="mt-2 inline-flex items-center gap-2 text-sm text-red-600">
-                <input type="checkbox" name="remove_file" value="1" class="rounded border-slate-300 text-red-600 focus:ring-red-500">
-                ลบไฟล์เดิม
-            </label>
-        @endif
-        <x-input-error :messages="$errors->get('file')" class="mt-2" />
+        <x-file-upload
+            name="file"
+            :current-url="$certificate?->file_url"
+            :current-name="$certificate?->display_name"
+            :show-remove="filled($certificate?->file_path)"
+        />
     </div>
 </div>

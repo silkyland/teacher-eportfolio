@@ -33,6 +33,7 @@ docker compose run --rm --no-deps node sh -c "npm install && npm run build"
 docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
 docker compose exec app php artisan storage:link
+docker compose exec app php artisan pdf:install-fonts
 ```
 
 เปิดเบราว์เซอร์: **http://localhost:8088**
@@ -55,6 +56,7 @@ php artisan key:generate
 # แก้ไข .env ให้ชี้ MySQL ของคุณ
 php artisan migrate --seed
 php artisan storage:link
+php artisan pdf:install-fonts
 npm install && npm run build
 php artisan serve --port=8088
 ```
@@ -100,7 +102,8 @@ docker compose run --rm --no-deps node npm run build
 
 - ฟีเจอร์ AI อ่านไฟล์เกียรติบัตรอัตโนมัติ **ยังไม่ได้รวมในเวอร์ชันนี้** (ต้องใช้ OCR/API เพิ่มเติม)
 - ไฟล์แนบเก็บใน `storage/app/public` ผ่าน Laravel Storage (public disk)
-- dompdf อาจแสดงฟอนต์ไทยใน PDF ไม่สมบูรณ์ 100% บนบางระบบ (แนะนำติดตั้งฟอนต์ไทยเพิ่มหากต้องการ)
+- รองรับอัปโหลดไฟล์ PDF/JPG/PNG สูงสุด **10MB** ที่เกียรติบัตร, รางวัล และหน้าแฟ้มผลงาน
+- PDF ใช้ฟอนต์ **TH Sarabun New** ฝังในไฟล์แล้ว — รัน `php artisan pdf:install-fonts` หลัง deploy ทุกครั้ง (หรือรวมในขั้นตอน setup)
 
 ## ผู้พัฒนา
 

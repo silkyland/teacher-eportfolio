@@ -6,9 +6,9 @@ use App\Http\Requests\StoreCertificateRequest;
 use App\Http\Requests\UpdateCertificateRequest;
 use App\Models\Category;
 use App\Models\Certificate;
+use App\Support\AttachmentHelper;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class CertificateController extends Controller
@@ -64,7 +64,7 @@ class CertificateController extends Controller
         $data['training_hours'] = $data['training_hours'] ?? 0;
 
         if ($request->hasFile('file')) {
-            $data['file_path'] = $request->file('file')->store('certificates/'.$request->user()->id, 'public');
+            $data = array_merge($data, AttachmentHelper::store($request->file('file'), 'certificates', $request->user()->id));
         }
 
         Certificate::create($data);
@@ -95,15 +95,14 @@ class CertificateController extends Controller
         $data = $request->safe()->except(['file', 'remove_file']);
 
         if ($request->boolean('remove_file') && $certificate->file_path) {
-            Storage::disk('public')->delete($certificate->file_path);
+            AttachmentHelper::delete($certificate->file_path);
             $data['file_path'] = null;
+            $data['original_name'] = null;
         }
 
         if ($request->hasFile('file')) {
-            if ($certificate->file_path) {
-                Storage::disk('public')->delete($certificate->file_path);
-            }
-            $data['file_path'] = $request->file('file')->store('certificates/'.$request->user()->id, 'public');
+            AttachmentHelper::delete($certificate->file_path);
+            $data = array_merge($data, AttachmentHelper::store($request->file('file'), 'certificates', $request->user()->id));
         }
 
         $certificate->update($data);
@@ -115,9 +114,7 @@ class CertificateController extends Controller
     {
         $this->authorize('delete', $certificate);
 
-        if ($certificate->file_path) {
-            Storage::disk('public')->delete($certificate->file_path);
-        }
+        AttachmentHelper::delete($certificate->file_path);
 
         $certificate->delete();
 

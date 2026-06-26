@@ -21,6 +21,54 @@
         </div>
     </div>
 
+    <div class="mb-8">
+        <x-card title="อัปโหลดเอกสารแนบแฟ้มผลงาน">
+        <form method="POST" action="{{ route('portfolio.files.store') }}" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @csrf
+            <div class="md:col-span-2">
+                <x-input-label for="portfolio_title" value="ชื่อเอกสาร *" />
+                <x-text-input id="portfolio_title" name="title" class="mt-1 block w-full" :value="old('title')" placeholder="เช่น แฟ้มสะสมผลงานฉบับสมบูรณ์" required />
+                <x-input-error :messages="$errors->get('title')" class="mt-2" />
+            </div>
+            <div class="md:col-span-2">
+                <x-input-label for="portfolio_description" value="รายละเอียด" />
+                <textarea id="portfolio_description" name="description" rows="2" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-sky-500 focus:ring-sky-500">{{ old('description') }}</textarea>
+            </div>
+            <div class="md:col-span-2">
+                <x-file-upload name="file" label="เลือกไฟล์แนบ (PDF/JPG/PNG สูงสุด 10MB) *" />
+            </div>
+            <div class="md:col-span-2">
+                <x-primary-button class="!bg-sky-600 hover:!bg-sky-700">อัปโหลดเอกสาร</x-primary-button>
+            </div>
+        </form>
+
+        @if($portfolioFiles->isNotEmpty())
+            <div class="mt-8 border-t border-slate-100 pt-6">
+                <h4 class="font-semibold text-sky-800 mb-4">เอกสารแนบแฟ้มผลงาน ({{ $portfolioFiles->count() }})</h4>
+                <div class="space-y-3">
+                    @foreach ($portfolioFiles as $file)
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border border-sky-50 rounded-lg p-4">
+                            <div>
+                                <p class="font-medium text-slate-800">{{ $file->title }}</p>
+                                @if($file->description)
+                                    <p class="text-sm text-slate-500 mt-1">{{ $file->description }}</p>
+                                @endif
+                                <div class="mt-2">
+                                    <x-attachment-link :url="$file->file_url" :name="$file->display_name" />
+                                </div>
+                            </div>
+                            <form action="{{ route('portfolio.files.destroy', $file) }}" method="POST" onsubmit="return confirm('ยืนยันการลบเอกสารนี้?')">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="text-sm text-red-600 hover:underline">ลบ</button>
+                            </form>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+        </x-card>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <x-card title="เกียรติบัตรการอบรม ({{ $certificates->count() }})">
             <div class="space-y-4">
@@ -35,6 +83,13 @@
                             <span class="px-2 py-1 bg-slate-100 text-slate-700 rounded">{{ $certificate->training_hours }} ชม.</span>
                             @if($certificate->format)
                                 <span class="px-2 py-1 bg-slate-100 text-slate-700 rounded">{{ $certificate->format }}</span>
+                            @endif
+                        </div>
+                        <div class="mt-3 flex flex-wrap items-center gap-2">
+                            @if($certificate->hasAttachment())
+                                <x-attachment-link :url="$certificate->file_url" :name="$certificate->display_name" />
+                            @else
+                                <a href="{{ route('certificates.edit', $certificate) }}" class="text-xs text-orange-600 hover:underline">+ แนบไฟล์เกียรติบัตร</a>
                             @endif
                         </div>
                     </div>
@@ -54,6 +109,13 @@
                             <span class="px-2 py-1 bg-orange-50 text-orange-700 rounded">{{ $award->level_label }}</span>
                             @if($award->award_date)
                                 <span class="px-2 py-1 bg-slate-100 text-slate-700 rounded">{{ $award->award_date->format('d/m/Y') }}</span>
+                            @endif
+                        </div>
+                        <div class="mt-3 flex flex-wrap items-center gap-2">
+                            @if($award->hasAttachment())
+                                <x-attachment-link :url="$award->file_url" :name="$award->display_name" />
+                            @else
+                                <a href="{{ route('awards.edit', $award) }}" class="text-xs text-orange-600 hover:underline">+ แนบไฟล์รางวัล</a>
                             @endif
                         </div>
                     </div>

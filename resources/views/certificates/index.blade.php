@@ -47,6 +47,7 @@
                         <th class="px-4 py-3 text-left font-semibold text-sky-900">หมวดหมู่</th>
                         <th class="px-4 py-3 text-left font-semibold text-sky-900">ชั่วโมง</th>
                         <th class="px-4 py-3 text-left font-semibold text-sky-900">วันที่</th>
+                        <th class="px-4 py-3 text-left font-semibold text-sky-900">ไฟล์แนบ</th>
                         <th class="px-4 py-3 text-right font-semibold text-sky-900">จัดการ</th>
                     </tr>
                 </thead>
@@ -67,6 +68,13 @@
                                     -
                                 @endif
                             </td>
+                            <td class="px-4 py-3">
+                                @if($certificate->hasAttachment())
+                                    <x-attachment-link :url="$certificate->file_url" :name="$certificate->display_name" />
+                                @else
+                                    <span class="text-slate-400">-</span>
+                                @endif
+                            </td>
                             <td class="px-4 py-3 text-right space-x-2 whitespace-nowrap">
                                 <a href="{{ route('certificates.show', $certificate) }}" class="text-sky-600 hover:underline">ดู</a>
                                 <a href="{{ route('certificates.edit', $certificate) }}" class="text-orange-600 hover:underline">แก้ไข</a>
@@ -77,7 +85,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">ยังไม่มีเกียรติบัตร</td></tr>
+                        <tr><td colspan="7" class="px-4 py-8 text-center text-slate-500">ยังไม่มีเกียรติบัตร</td></tr>
                     @endforelse
                 </tbody>
             </table>

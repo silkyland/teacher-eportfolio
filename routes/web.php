@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AwardController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\DashboardController;
@@ -20,7 +21,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('awards', AwardController::class);
 
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
+    Route::post('/portfolio/files', [PortfolioController::class, 'storeFile'])->name('portfolio.files.store');
+    Route::delete('/portfolio/files/{portfolioFile}', [PortfolioController::class, 'destroyFile'])->name('portfolio.files.destroy');
     Route::get('/portfolio/pdf', [PortfolioController::class, 'pdf'])->name('portfolio.pdf');
+
+    Route::get('/attachments/{type}/{id}', [AttachmentController::class, 'show'])->name('attachments.show');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

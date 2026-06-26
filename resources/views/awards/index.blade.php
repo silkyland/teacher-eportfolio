@@ -46,6 +46,7 @@
                         <th class="px-4 py-3 text-left font-semibold text-sky-900">หน่วยงาน</th>
                         <th class="px-4 py-3 text-left font-semibold text-sky-900">ระดับ</th>
                         <th class="px-4 py-3 text-left font-semibold text-sky-900">วันที่ได้รับ</th>
+                        <th class="px-4 py-3 text-left font-semibold text-sky-900">ไฟล์แนบ</th>
                         <th class="px-4 py-3 text-right font-semibold text-sky-900">จัดการ</th>
                     </tr>
                 </thead>
@@ -56,6 +57,13 @@
                             <td class="px-4 py-3">{{ $award->awarding_organization ?? '-' }}</td>
                             <td class="px-4 py-3"><span class="inline-flex px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-xs">{{ $award->level_label }}</span></td>
                             <td class="px-4 py-3">{{ $award->award_date?->format('d/m/Y') ?? '-' }}</td>
+                            <td class="px-4 py-3">
+                                @if($award->hasAttachment())
+                                    <x-attachment-link :url="$award->file_url" :name="$award->display_name" />
+                                @else
+                                    <span class="text-slate-400">-</span>
+                                @endif
+                            </td>
                             <td class="px-4 py-3 text-right space-x-2 whitespace-nowrap">
                                 <a href="{{ route('awards.show', $award) }}" class="text-sky-600 hover:underline">ดู</a>
                                 <a href="{{ route('awards.edit', $award) }}" class="text-orange-600 hover:underline">แก้ไข</a>
@@ -66,7 +74,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">ยังไม่มีรางวัล</td></tr>
+                        <tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">ยังไม่มีรางวัล</td></tr>
                     @endforelse
                 </tbody>
             </table>

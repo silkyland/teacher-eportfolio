@@ -20,16 +20,7 @@
                 @else - @endif
             </dd></div>
             <div class="md:col-span-2"><dt class="text-slate-500">รายละเอียด</dt><dd class="mt-1 whitespace-pre-line">{{ $certificate->description ?? '-' }}</dd></div>
-            <div class="md:col-span-2">
-                <dt class="text-slate-500">ไฟล์แนบ</dt>
-                <dd class="mt-1">
-                    @if($certificate->file_path)
-                        <a href="{{ $certificate->file_url }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-sky-50 text-sky-700 rounded-lg hover:bg-sky-100">เปิดดูไฟล์</a>
-                    @else
-                        -
-                    @endif
-                </dd>
-            </div>
+            <x-attachment-preview :item="$certificate" :edit-url="route('certificates.edit', $certificate)" />
         </dl>
         <div class="mt-6">
             <a href="{{ route('certificates.index') }}" class="text-sky-600 hover:underline text-sm">← กลับรายการ</a>

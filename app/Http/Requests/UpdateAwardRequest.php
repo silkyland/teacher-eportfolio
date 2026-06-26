@@ -22,7 +22,7 @@ class UpdateAwardRequest extends FormRequest
             'level' => ['required', Rule::enum(AwardLevel::class)],
             'award_date' => ['nullable', 'date'],
             'description' => ['nullable', 'string', 'max:5000'],
-            'file' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
+            'file' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
             'remove_file' => ['nullable', 'boolean'],
         ];
     }
@@ -34,7 +34,7 @@ class UpdateAwardRequest extends FormRequest
             'title.required' => 'กรุณากรอกชื่อรางวัล',
             'level.required' => 'กรุณาเลือกระดับรางวัล',
             'file.mimes' => 'รองรับเฉพาะไฟล์ PDF, JPG หรือ PNG',
-            'file.max' => 'ขนาดไฟล์ต้องไม่เกิน 5 MB',
+            'file.max' => 'ขนาดไฟล์ต้องไม่เกิน 10 MB',
         ];
     }
 }

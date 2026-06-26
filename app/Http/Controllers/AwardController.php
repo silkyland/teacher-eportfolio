@@ -6,9 +6,9 @@ use App\Enums\AwardLevel;
 use App\Http\Requests\StoreAwardRequest;
 use App\Http\Requests\UpdateAwardRequest;
 use App\Models\Award;
+use App\Support\AttachmentHelper;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class AwardController extends Controller
@@ -57,7 +57,7 @@ class AwardController extends Controller
         $data['user_id'] = $request->user()->id;
 
         if ($request->hasFile('file')) {
-            $data['file_path'] = $request->file('file')->store('awards/'.$request->user()->id, 'public');
+            $data = array_merge($data, AttachmentHelper::store($request->file('file'), 'awards', $request->user()->id));
         }
 
         Award::create($data);
@@ -87,15 +87,14 @@ class AwardController extends Controller
         $data = $request->safe()->except(['file', 'remove_file']);
 
         if ($request->boolean('remove_file') && $award->file_path) {
-            Storage::disk('public')->delete($award->file_path);
+            AttachmentHelper::delete($award->file_path);
             $data['file_path'] = null;
+            $data['original_name'] = null;
         }
 
         if ($request->hasFile('file')) {
-            if ($award->file_path) {
-                Storage::disk('public')->delete($award->file_path);
-            }
-            $data['file_path'] = $request->file('file')->store('awards/'.$request->user()->id, 'public');
+            AttachmentHelper::delete($award->file_path);
+            $data = array_merge($data, AttachmentHelper::store($request->file('file'), 'awards', $request->user()->id));
         }
 
         $award->update($data);
@@ -107,9 +106,7 @@ class AwardController extends Controller
     {
         $this->authorize('delete', $award);
 
-        if ($award->file_path) {
-            Storage::disk('public')->delete($award->file_path);
-        }
+        AttachmentHelper::delete($award->file_path);
 
         $award->delete();
 

@@ -1,17 +1,66 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>แฟ้มผลงาน - {{ $user->name }}</title>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #1e293b; }
-        h1 { color: #0369a1; margin-bottom: 4px; }
-        h2 { color: #0284c7; border-bottom: 2px solid #bae6fd; padding-bottom: 4px; margin-top: 24px; }
-        .header { background: #e0f2fe; padding: 16px; border-radius: 8px; margin-bottom: 20px; }
+        @page { margin: 24px 28px; }
+
+        body {
+            font-family: thsarabunnew, sans-serif;
+            font-size: 16px;
+            color: #1e293b;
+            line-height: 1.35;
+        }
+
+        h1 {
+            color: #0369a1;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 0 6px;
+        }
+
+        h2 {
+            color: #0284c7;
+            font-size: 22px;
+            font-weight: bold;
+            border-bottom: 2px solid #bae6fd;
+            padding-bottom: 4px;
+            margin: 22px 0 12px;
+        }
+
+        .header {
+            background: #e0f2fe;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+        }
+
         .meta { margin: 2px 0; }
-        .item { border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 8px; }
-        .badge { display: inline-block; background: #ffedd5; color: #c2410c; padding: 2px 8px; border-radius: 999px; font-size: 10px; }
-        .badge-blue { background: #e0f2fe; color: #0369a1; }
+
+        .item {
+            border: 1px solid #e2e8f0;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ffedd5;
+            color: #c2410c;
+            padding: 1px 8px;
+            font-size: 14px;
+        }
+
+        .badge-blue {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .footer {
+            margin-top: 24px;
+            font-size: 13px;
+            color: #64748b;
+        }
     </style>
 </head>
 <body>
@@ -35,7 +84,7 @@
                 <br>วันที่: {{ $certificate->start_date->format('d/m/Y') }}
                 @if($certificate->end_date) - {{ $certificate->end_date->format('d/m/Y') }} @endif
             @endif
-            @if($certificate->description)<br><small>{{ $certificate->description }}</small>@endif
+            @if($certificate->description)<br>{{ $certificate->description }}@endif
         </div>
     @empty
         <p>ไม่มีข้อมูล</p>
@@ -48,12 +97,12 @@
             <span class="badge">{{ $award->level_label }}</span><br>
             หน่วยงาน: {{ $award->awarding_organization ?? '-' }}
             @if($award->award_date) | วันที่: {{ $award->award_date->format('d/m/Y') }} @endif
-            @if($award->description)<br><small>{{ $award->description }}</small>@endif
+            @if($award->description)<br>{{ $award->description }}@endif
         </div>
     @empty
         <p>ไม่มีข้อมูล</p>
     @endforelse
 
-    <p style="margin-top: 24px; font-size: 10px; color: #64748b;">สร้างเมื่อ {{ now()->format('d/m/Y H:i') }} จากระบบแฟ้มผลงานครู</p>
+    <p class="footer">สร้างเมื่อ {{ now()->format('d/m/Y H:i') }} จากระบบแฟ้มผลงานครู</p>
 </body>
 </html>

@@ -13,14 +13,7 @@
             <div><dt class="text-slate-500">ระดับ</dt><dd class="mt-1"><span class="inline-flex px-2 py-1 rounded-full bg-orange-50 text-orange-700">{{ $award->level_label }}</span></dd></div>
             <div><dt class="text-slate-500">วันที่ได้รับ</dt><dd class="mt-1">{{ $award->award_date?->format('d/m/Y') ?? '-' }}</dd></div>
             <div class="md:col-span-2"><dt class="text-slate-500">รายละเอียด</dt><dd class="mt-1 whitespace-pre-line">{{ $award->description ?? '-' }}</dd></div>
-            <div class="md:col-span-2">
-                <dt class="text-slate-500">ไฟล์แนบ</dt>
-                <dd class="mt-1">
-                    @if($award->file_path)
-                        <a href="{{ $award->file_url }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-sky-50 text-sky-700 rounded-lg hover:bg-sky-100">เปิดดูไฟล์</a>
-                    @else - @endif
-                </dd>
-            </div>
+            <x-attachment-preview :item="$award" :edit-url="route('awards.edit', $award)" />
         </dl>
         <div class="mt-6"><a href="{{ route('awards.index') }}" class="text-sky-600 hover:underline text-sm">← กลับรายการ</a></div>
     </x-card>
